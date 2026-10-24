@@ -29,3 +29,7 @@ three.js `0.160.0` loads from jsDelivr through the import map in `index.html`.
 ## Design rules and QA
 
 See `.claude/skills/pofolio-room-design/SKILL.md` for tokens, the object-to-section map, how to add projects or sections, and the screenshot QA script.
+
+## Deploy (Railway)
+
+Railway builds with Railpack. The `Staticfile` at the repo root (`root: dist`) tells Railpack to serve `dist/` as a static site with Caddy, so there's no build step and no variables to set.

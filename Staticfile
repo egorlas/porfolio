@@ -1,0 +1,3 @@
+# Railway (Railpack) serves this repo as a static site with Caddy.
+# The site lives in dist/, so point the web root there.
+root: dist
