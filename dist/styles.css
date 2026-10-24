@@ -1007,6 +1007,60 @@ kbd {
   font-size: 10px;
 }
 
+.shelf {
+  border-bottom: 1px solid var(--line);
+}
+
+.shelf-columns {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px 4%;
+}
+
+.shelf-column h3 {
+  margin: 0;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--ink);
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.book-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each row is a book spine; the colours match the books in the 3D bookcase. */
+.book-list li {
+  display: grid;
+  gap: 8px;
+  padding: 24px 0 24px 26px;
+  border-bottom: 1px solid var(--line);
+  box-shadow: inset 8px 0 0 var(--book);
+  transition: padding .35s var(--ease), background .35s;
+}
+
+.book-list li:hover {
+  padding-left: 38px;
+  background: linear-gradient(90deg, rgba(255, 33, 72, .07), transparent);
+}
+
+.book-list strong {
+  font-size: clamp(26px, 2.6vw, 40px);
+  letter-spacing: -.06em;
+  line-height: 1;
+}
+
+.book-list span {
+  max-width: 460px;
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
 .live .section-index {
   margin-bottom: 42px;
 }
@@ -1425,7 +1479,7 @@ kbd {
     top: auto;
     left: auto;
     width: min(80vw, 560px);
-    margin: -3vw auto 30px;
+    margin: 4vw auto 30px;
     transform: none;
   }
 
@@ -1525,11 +1579,21 @@ kbd {
   .project-card,
   .project-featured {
     grid-row: auto;
-    min-height: 560px;
+    min-height: 420px;
   }
 
   .project-featured {
-    min-height: 690px;
+    min-height: 500px;
+  }
+
+  /* In flow on small screens so it can't sit on top of the tech tags. */
+  .card-link {
+    position: relative;
+    z-index: 2;
+    right: auto;
+    bottom: auto;
+    align-self: flex-start;
+    margin-top: 24px;
   }
 
   .project-body h3 {
@@ -1551,6 +1615,15 @@ kbd {
 
   .tool-marquee {
     margin-bottom: -90px;
+  }
+
+  .shelf-columns {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+
+  .book-list li {
+    padding: 20px 0 20px 22px;
   }
 
   .live-links a {
@@ -1631,13 +1704,16 @@ kbd {
     margin-left: 12%;
   }
 
-  .signal-strip {
-    display: block;
+  .metric {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    min-height: 0;
+    padding: 18px 14px;
   }
 
-  .metric {
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
+  .metric strong {
+    font-size: 40px;
   }
 
   .manifesto-copy {
@@ -1649,12 +1725,12 @@ kbd {
   }
 
   .project-card {
+    min-height: 360px;
     padding: 20px;
   }
 
-  .card-link {
-    right: 20px;
-    bottom: 20px;
+  .project-featured {
+    min-height: 440px;
   }
 
   .capability {
@@ -1668,6 +1744,17 @@ kbd {
 
   .capability h3 {
     margin-bottom: 15px;
+  }
+
+  .live-links a {
+    gap: 12px;
+    padding: 0;
+  }
+
+  .live-links span {
+    min-width: 0;
+    font-size: 8.6vw;
+    overflow-wrap: anywhere;
   }
 
   .contact-top {

@@ -14,7 +14,10 @@ const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const body = document.body;
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse = window.matchMedia('(pointer: coarse)').matches;
-const SECTIONS = ['about', 'work', 'products', 'stack', 'contact'];
+// Mirrors room.css: the sheet is a side panel on wide screens and on phones in landscape, a bottom sheet otherwise.
+const sideSheet = window.matchMedia('(min-width: 861px), (orientation: landscape) and (max-height: 500px)');
+const landscapePhone = window.matchMedia('(orientation: landscape) and (max-height: 500px)');
+const SECTIONS = ['about', 'work', 'products', 'stack', 'shelf', 'contact'];
 const EMAIL = 'egorlas1996@gmail.com';
 
 const V = (a) => new THREE.Vector3(...a);
@@ -25,6 +28,7 @@ const POSES = {
   work: { pos: [-0.56, 1.3, 0.22], target: [-0.86, 0.96, -0.9] },
   products: { pos: [0.52, 1.18, 0.08], target: [0.66, 0.85, -0.78] },
   stack: { pos: [1.08, 1.62, 0.6], target: [1.32, 1.62, -1.15] },
+  shelf: { pos: [1.18, 1.18, 0.62], target: [1.34, 0.56, -0.98] },
   contact: { pos: [0.7, 1.12, 0.32], target: [0.8, 0.84, -0.36] }
 };
 
@@ -132,8 +136,9 @@ async function boot() {
     const look = V(pose.target);
     const aspect = W / H;
     const wide = name === 'overview' || name === 'intro';
-    if (wide && aspect < 1) {
-      // Portrait screens: centre between the lamp and the corkboard so both stay in frame.
+    // Portrait and near-square screens are width-limited: centre between the lamp and the bookcase so both stay in frame.
+    const narrow = aspect < 1.45;
+    if (wide && narrow) {
       pos.x += 0.3;
       look.x += 0.3;
     }
@@ -141,7 +146,7 @@ async function boot() {
     if (wide) {
       const halfH = THREE.MathUtils.degToRad(camera.fov / 2);
       const halfW = Math.atan(Math.tan(halfH) * aspect);
-      const needed = (aspect < 1 ? 1.55 : 1.3) / Math.tan(halfW);
+      const needed = (narrow ? 1.55 : 1.3) / Math.tan(halfW);
       const length = dir.length();
       if (needed > length) pos.copy(look).addScaledVector(dir.normalize(), needed + (name === 'intro' ? 2.5 : 0));
     } else if (aspect < 1) {
@@ -172,9 +177,14 @@ async function boot() {
   const sheet = $('[data-sheet]');
   const offset = { x: 0, y: 0, tx: 0, ty: 0 };
   const updateOffsetTarget = () => {
-    const wide = W > 860;
+    const wide = sideSheet.matches;
     if (!body.classList.contains('is-open')) {
       // Overview: nudge the room up and right so the title in the lower-left corner has clear space.
+      if (landscapePhone.matches) {
+        offset.tx = -W * 0.1;
+        offset.ty = H * 0.07;
+        return;
+      }
       offset.tx = wide ? -W * 0.025 : 0;
       offset.ty = H * (wide ? 0.07 : 0.05);
       return;
@@ -277,6 +287,37 @@ async function boot() {
     if (returnFocus && document.contains(returnFocus)) returnFocus.focus({ preventScroll: true });
     returnFocus = null;
   };
+
+  /* ---------- Bottom sheet: swipe down from the top to close ---------- */
+  let swipe = null;
+  const endSwipe = () => {
+    sheet.classList.remove('is-dragging');
+    sheet.style.transform = '';
+    swipe = null;
+  };
+  sheet.addEventListener('touchstart', (event) => {
+    swipe = !sideSheet.matches && sheet.scrollTop <= 0 && event.touches.length === 1
+      ? { y: event.touches[0].clientY, dy: 0 }
+      : null;
+  }, { passive: true });
+  sheet.addEventListener('touchmove', (event) => {
+    if (!swipe) return;
+    swipe.dy = event.touches[0].clientY - swipe.y;
+    // Dragging up, or content already scrolled: let the sheet scroll normally.
+    if (swipe.dy <= 0 || sheet.scrollTop > 0) {
+      endSwipe();
+      return;
+    }
+    sheet.classList.add('is-dragging');
+    sheet.style.transform = `translateY(${swipe.dy}px)`;
+  }, { passive: true });
+  sheet.addEventListener('touchend', () => {
+    if (!swipe) return;
+    const shouldClose = swipe.dy > Math.min(120, sheet.offsetHeight * 0.25);
+    endSwipe();
+    if (shouldClose) close();
+  });
+  sheet.addEventListener('touchcancel', () => { if (swipe) endSwipe(); });
 
   /* ---------- Actions ---------- */
   const sound = new RoomSound('assets/background.mp3');

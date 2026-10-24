@@ -58,6 +58,7 @@
       <button type="button" data-go="work" aria-current="false">Work</button>
       <button type="button" data-go="products" aria-current="false">Products</button>
       <button type="button" data-go="stack" aria-current="false">Stack</button>
+      <button type="button" data-go="shelf" aria-current="false">Shelf</button>
       <button type="button" data-go="contact" aria-current="false">Contact</button>
     </nav>
     <div class="room-tools">
@@ -69,11 +70,11 @@
 
   <section class="intro" aria-labelledby="intro-title">
     <p class="intro-kicker">Product Engineer · AI Product Builder · Ha Noi</p>
-    <h1 id="intro-title">Vuong<br>Ngo</h1>
+    <h1 id="intro-title">Vuong<br> Ngo</h1>
     <p class="intro-line">I build products people keep using<span>.</span></p>
   </section>
 
-  <p class="room-hint"><span class="hint-fine">Move to look around. Click anything on the desk.</span><span class="hint-touch">Tap the labels to open each part of the desk.</span> <kbd>Esc</kbd> steps back.</p>
+  <p class="room-hint"><span class="hint-fine">Move to look around. Click anything on the desk. <kbd>Esc</kbd> steps back.</span><span class="hint-touch">Tap the labels to open each part of the desk. Swipe the page down to step back.</span></p>
 
   <div class="markers" data-markers></div>
   <div class="tooltip" data-tooltip hidden><strong></strong><span></span></div>
@@ -227,6 +228,31 @@
           <p>Stripe, VietQR/SePay, Zalo ZNS, Google Meet, LiveKit, Docker, GitHub Actions, Cloud Run, Railway and Vercel.</p>
         </section>
       </div>
+      <p class="page-actions"><button class="btn" type="button" data-go="shelf">Next: Shelf →</button></p>
+    </article>
+
+    <article class="page" data-page="shelf" hidden>
+      <p class="page-kicker">Shelf · the bookcase</p>
+      <h2 tabindex="-1">Beyond the code.</h2>
+      <p class="lead">What fills the hours away from the keyboard, and the habits of mind I bring back to every product.</p>
+      <section class="shelf-group" aria-labelledby="shelf-hobbies">
+        <h3 class="label" id="shelf-hobbies">Hobbies · bottom shelf</h3>
+        <ul class="books">
+          <li style="--book: #2f5d50"><strong>Reading</strong><span>Books keep me curious beyond the screen and patient with long problems.</span></li>
+          <li style="--book: #4a3f8f"><strong>Gaming</strong><span>Good games are good product design: clear goals, fast feedback, fair difficulty.</span></li>
+          <li style="--book: #c46a2b"><strong>Sports</strong><span>Time away from the screen that keeps my head clear for the next build.</span></li>
+          <li style="--book: #1f6f8b"><strong>Tech research</strong><span>Trying new tools, frameworks and AI models early, then keeping only what earns its place.</span></li>
+        </ul>
+      </section>
+      <section class="shelf-group" aria-labelledby="shelf-skills">
+        <h3 class="label" id="shelf-skills">Soft skills · top shelf</h3>
+        <ul class="books">
+          <li style="--book: #7a1f3d"><strong>Critical thinking</strong><span>Question the brief, check the data and separate signal from opinion before building.</span></li>
+          <li style="--book: #b08d2e"><strong>Problem solving</strong><span>Break a fuzzy problem into the smallest complete loop that can ship and be measured.</span></li>
+          <li style="--book: #3d5a80"><strong>System design</strong><span>Choose the simplest architecture that can carry the product, like a 12-schema PostgreSQL modular monolith.</span></li>
+          <li style="--book: #5b4636"><strong>Product Owner · Business Analyst</strong><span>Turn business goals into prioritised hypotheses, clear requirements and acceptance criteria.</span></li>
+        </ul>
+      </section>
       <p class="page-actions"><button class="btn" type="button" data-go="contact">Next: Contact →</button></p>
     </article>
 

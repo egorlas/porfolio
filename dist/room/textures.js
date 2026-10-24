@@ -136,6 +136,54 @@ export function binderSpine({ color, company, years }) {
   return toTexture(canvas);
 }
 
+// Cloth book spine standing on a shelf: two foil bands and a vertical title.
+export function bookSpine({ color, title }) {
+  const [canvas, ctx] = makeCanvas(96, 512);
+  ctx.fillStyle = color;
+  ctx.fillRect(0, 0, 96, 512);
+  const shade = ctx.createLinearGradient(0, 0, 96, 0);
+  shade.addColorStop(0, 'rgba(0,0,0,.28)');
+  shade.addColorStop(0.3, 'rgba(255,255,255,.08)');
+  shade.addColorStop(1, 'rgba(0,0,0,.22)');
+  ctx.fillStyle = shade;
+  ctx.fillRect(0, 0, 96, 512);
+  ctx.fillStyle = '#d9b36a';
+  [34, 46, 466, 478].forEach((y) => ctx.fillRect(10, y, 76, 4));
+  ctx.save();
+  ctx.translate(48, 256);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillStyle = '#f1ebdf';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.font = `800 38px ${FONTS.display}`;
+  ctx.fillText(title.toUpperCase(), 0, 2, 380);
+  ctx.restore();
+  return toTexture(canvas);
+}
+
+export function footballTexture() {
+  const [canvas, ctx] = makeCanvas(256, 128);
+  ctx.fillStyle = '#efe9dc';
+  ctx.fillRect(0, 0, 256, 128);
+  ctx.fillStyle = '#1b1718';
+  const patch = (x, y, r) => {
+    ctx.beginPath();
+    for (let i = 0; i < 5; i++) {
+      const a = (i / 5) * Math.PI * 2 - Math.PI / 2;
+      ctx.lineTo(x + Math.cos(a) * r * 2, y + Math.sin(a) * r);
+    }
+    ctx.closePath();
+    ctx.fill();
+  };
+  for (let i = 0; i < 5; i++) {
+    patch(i * 51.2 + 12, 44, 13);
+    patch(i * 51.2 + 38, 86, 13);
+  }
+  ctx.fillRect(0, 0, 256, 8);
+  ctx.fillRect(0, 120, 256, 8);
+  return toTexture(canvas);
+}
+
 // Spine of a VHS tape lying flat: black plastic with a hand-labelled sticker.
 export function tapeSpine({ title, tag, index }) {
   const [canvas, ctx] = makeCanvas(640, 96);

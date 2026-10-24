@@ -29,12 +29,15 @@ three.js is pinned to `three@0.160.0` through the import map in `index.html`. Do
 | Three binders (TeenCare red, Thưởng Trà amber, eJOY blue) | `work` | Work |
 | Stack of VHS tapes, one per project | `products` (+ `project` key scrolls to the card) | Products |
 | Sticky notes on the corkboard | `stack` | Stack |
+| Low bookcase right of the desk (soft skills on the top shelf, hobbies below, gamepad and football on top) | `shelf` | Shelf |
 | Red rotary phone | `contact` | Contact |
 | Red floppy "CV.PDF" | downloads `assets/ngo-vuong-cv.pdf` | CV |
 | Desk lamp | toggles the lamp | none, discovered by hover |
 | Radio on the wall shelf (or the Music chip in the header) | plays or pauses `background.mp3` | none, discovered by hover |
 
-Binder colours are repeated as the `.swatch` next to each role in the sheet. If you add a role, add both the binder (`roles` in scene.js) and the swatch.
+Binder colours are repeated as the `.swatch` next to each role in the sheet. If you add a role, add both the binder (`roles` in scene.js) and the swatch. Book spine colours work the same way: `shelfRows` in scene.js and the `--book` value on each item in index.html and static.html must match.
+
+The bookcase sits in the dark right corner, so it has warm LED strips under its shelves and one small warm point light. They count as lamp light (warm inside), not a new hue.
 
 ## Tokens
 
@@ -74,7 +77,10 @@ Type:
 ## Accessibility rules
 
 - Every section is reachable without the canvas: header nav, DOM markers (real `<button>`s), the skip link, and the Text version.
-- `Esc` closes the sheet; focus moves to the sheet's `h2` on open and goes back to the trigger on close.
+- `Esc` closes the sheet; focus moves to the sheet's `h2` on open and goes back to the trigger on close. On phones, swiping down from the top of the bottom sheet also closes it.
+- Sheet layout: side panel at `min-width: 861px` **and** on phones in landscape (`orientation: landscape` and `max-height: 500px`), bottom sheet otherwise. `sideSheet` in main.js mirrors that query; change both together.
+- The sheet has no top padding on purpose (Chrome pins sticky children below the padding edge). Space the close button with its margin.
+- Touch (`pointer: coarse`): markers get a 38 px invisible hit area, `Esc` hints are hidden.
 - No WebGL → redirect to `static.html?from=room`, which explains why.
 
 ## QA

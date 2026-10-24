@@ -172,7 +172,7 @@
   };
 
   const runCommand = (command) => {
-    if (['work', 'products', 'stack', 'contact'].includes(command)) {
+    if (['work', 'products', 'stack', 'shelf', 'contact'].includes(command)) {
       goTo(command);
       return;
     }

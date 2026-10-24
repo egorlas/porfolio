@@ -451,6 +451,94 @@ export function buildRoom({ portrait }) {
     apply: (h) => { photo.rotation.z = 0.05 - h * 0.07; photo.scale.setScalar(1 + h * 0.05); photo.position.z = 0.034 + h * 0.02; }
   });
 
+  /* ---------- Bookcase → Shelf (hobbies below, soft skills above) ---------- */
+  const bookcase = new THREE.Group();
+  bookcase.position.set(1.34, 0, -0.98);
+  scene.add(bookcase);
+  const BW = 0.56;
+  const BH = 0.9;
+  const BD = 0.3;
+  const carcass = std('#5a3826', { roughness: 0.55 });
+  [-1, 1].forEach((s) => add(bookcase, new THREE.BoxGeometry(0.025, BH, BD), carcass, [s * (BW / 2 - 0.0125), BH / 2, 0]));
+  add(bookcase, rbox(BW + 0.02, 0.03, BD + 0.02, 0.006), carcass, [0, BH + 0.015, 0]);
+  add(bookcase, new THREE.BoxGeometry(BW, 0.04, BD), carcass, [0, 0.02, 0]);
+  add(bookcase, new THREE.BoxGeometry(BW, 0.025, BD), carcass, [0, 0.4625, 0]);
+  add(bookcase, new THREE.BoxGeometry(BW, BH, 0.01), std('#24160f', { roughness: 0.8 }), [0, BH / 2, -BD / 2 + 0.005]);
+  // Warm LED strips under the top and the middle shelf, so the spines read in the dark corner.
+  const stripMat = basic('#ffcf94', 2.2);
+  [BH - 0.004, 0.447].forEach((y) => noShadow.add(add(bookcase, new THREE.BoxGeometry(BW - 0.07, 0.006, 0.012), stripMat, [0, y, BD / 2 - 0.03])));
+  const shelfGlow = new THREE.PointLight('#ffb36b', 1.6, 1.1, 1.4);
+  shelfGlow.position.set(0, 0.62, 0.32);
+  bookcase.add(shelfGlow);
+
+  const shelfRows = [
+    {
+      y: 0.04,
+      books: [
+        { title: 'Reading', color: '#2f5d50', w: 0.06, h: 0.3, pull: true },
+        { title: 'Gaming', color: '#4a3f8f', w: 0.052, h: 0.27 },
+        { title: 'Sports', color: '#c46a2b', w: 0.056, h: 0.29 },
+        { title: 'Tech research', color: '#1f6f8b', w: 0.062, h: 0.32 }
+      ]
+    },
+    {
+      y: 0.475,
+      books: [
+        { title: 'Critical thinking', color: '#7a1f3d', w: 0.06, h: 0.32 },
+        { title: 'Problem solving', color: '#b08d2e', w: 0.058, h: 0.3 },
+        { title: 'System design', color: '#3d5a80', w: 0.064, h: 0.33, pull: true },
+        { title: 'PO · BA', color: '#5b4636', w: 0.054, h: 0.28 }
+      ]
+    }
+  ];
+  const pulled = [];
+  shelfRows.forEach((row) => {
+    let x = -BW / 2 + 0.04;
+    row.books.forEach((book) => {
+      const cloth = std(book.color, { roughness: 0.7 });
+      const pages = std('#e9e0cc', { roughness: 0.9 });
+      const spine = std('#ffffff', { map: T.bookSpine(book), roughness: 0.7 });
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(book.w, book.h, 0.2), [cloth, cloth, pages, cloth, spine, cloth]);
+      mesh.position.set(x + book.w / 2, row.y + book.h / 2, 0.02);
+      bookcase.add(mesh);
+      if (book.pull) pulled.push(mesh);
+      x += book.w + 0.004;
+    });
+    // Unlabelled filler: two plain books and one leaning on them.
+    ['#2b2a33', '#6b2a2a', '#3f4a3a'].forEach((color, i) => {
+      const h = 0.24 - i * 0.02;
+      const filler = add(bookcase, new THREE.BoxGeometry(0.04, h, 0.19), std(color, { roughness: 0.75 }), [x + 0.02 + i * 0.044, row.y + h / 2, 0.015]);
+      if (i === 2) {
+        filler.rotation.z = -0.32;
+        filler.position.x += 0.035;
+        filler.position.y -= 0.012;
+      }
+    });
+  });
+
+  // Gamepad and a football on top: the hobbies spill out of the shelf.
+  const padMat = std('#1d1c22', { roughness: 0.45 });
+  const pad = new THREE.Group();
+  pad.position.set(-0.12, BH + 0.03, 0.04);
+  pad.rotation.y = 0.35;
+  bookcase.add(pad);
+  add(pad, rbox(0.11, 0.025, 0.06, 0.012), padMat, [0, 0.0125, 0]);
+  [-1, 1].forEach((s) => add(pad, rbox(0.04, 0.024, 0.06, 0.012), padMat, [s * 0.055, 0.012, 0.018]).rotation.y = s * -0.35);
+  [-1, 1].forEach((s) => add(pad, new THREE.CylinderGeometry(0.007, 0.007, 0.012, 12), std('#3a3940'), [s * 0.025, 0.03, 0.008]));
+  add(pad, new THREE.SphereGeometry(0.005, 10, 8), std('#ff2148', { roughness: 0.3 }), [0.042, 0.027, -0.006]);
+  const ball = add(bookcase, new THREE.SphereGeometry(0.075, 32, 20), std('#ffffff', { map: T.footballTexture(), roughness: 0.55 }), [0.15, BH + 0.105, 0]);
+  ball.rotation.set(0.4, 0.8, 0.2);
+
+  register({
+    id: 'bookcase', object: bookcase, label: 'The bookshelf', hint: 'Hobbies & soft skills',
+    section: 'shelf',
+    apply: (h) => {
+      pulled.forEach((book) => { book.position.z = 0.02 + h * 0.06; });
+      ball.position.y = BH + 0.105 + h * 0.02;
+    }
+  });
+  markers.push({ section: 'shelf', label: 'Shelf', anchor: V(1.34, 0.62, -0.84) });
+
   /* ---------- Neon sign ---------- */
   const neonMat = new THREE.MeshBasicMaterial({ map: T.neonSign('egorlas'), transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false });
   const neon = add(scene, new THREE.PlaneGeometry(1.0, 0.274), neonMat, [1.3, 2.3, WALL_Z + 0.03]);
@@ -499,7 +587,7 @@ export function buildRoom({ portrait }) {
 
   /* ---------- Plant ---------- */
   const plant = new THREE.Group();
-  plant.position.set(1.62, 0, -0.78);
+  plant.position.set(2.02, 0, -0.78);
   scene.add(plant);
   add(plant, new THREE.CylinderGeometry(0.17, 0.13, 0.4, 28), std('#57524d', { roughness: 0.85 }), [0, 0.2, 0]);
   add(plant, new THREE.CircleGeometry(0.16, 24), std('#1c140f'), [0, 0.39, 0]).rotation.x = -Math.PI / 2;

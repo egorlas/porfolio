@@ -2,7 +2,7 @@
 
 Personal portfolio for Vuong Ngo (egorlas). It's a static site in two versions:
 
-- **3D room** (`dist/index.html`): a desk in Ha Noi at midnight while it rains, built with three.js. Click objects or markers to open each section: the CRT for About, the binders for Work, the VHS tapes for Products, the corkboard for Stack, the phone for Contact, and the floppy to download the CV. The lamp and the radio can be switched on and off.
+- **3D room** (`dist/index.html`): a desk in Ha Noi at midnight while it rains, built with three.js. Click objects or markers to open each section: the CRT for About, the binders for Work, the VHS tapes for Products, the corkboard for Stack, the bookcase for Shelf (hobbies and soft skills), the phone for Contact, and the floppy to download the CV. The lamp and the radio can be switched on and off.
 - **Text version** (`dist/static.html`): the original single-page layout. Visitors without WebGL are sent here automatically.
 
 ## Local preview
