@@ -1706,3 +1706,9 @@ kbd {
     display: none;
   }
 }
+
+/* Link back to the 3D room (index.html). Stays visible on small screens. */
+.header-actions .room-link {
+  display: flex;
+  text-decoration: none;
+}
