@@ -7,7 +7,7 @@ import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { buildRoom } from './scene.js';
 import { GradeShader } from './shaders.js';
 import { loadFonts } from './textures.js';
-import { RainSound } from './audio.js';
+import { RoomSound } from './audio.js';
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -279,14 +279,20 @@ async function boot() {
   };
 
   /* ---------- Actions ---------- */
-  const sound = new RainSound();
+  const sound = new RoomSound('assets/background.mp3');
   const soundButton = $('[data-sound]');
   const toggleSound = async () => {
-    const playing = await sound.toggle();
+    let playing;
+    try {
+      playing = await sound.toggle();
+    } catch {
+      showToast("The music couldn't play. Try again.");
+      return;
+    }
     room.setRadio(playing);
     soundButton.setAttribute('aria-pressed', String(playing));
-    soundButton.querySelector('span').textContent = playing ? 'Rain on' : 'Rain off';
-    showToast(playing ? 'Rain radio on' : 'Rain radio off');
+    soundButton.querySelector('span').textContent = playing ? 'Music on' : 'Music off';
+    showToast(playing ? 'Radio on' : 'Radio off');
   };
 
   const runItem = (item) => {

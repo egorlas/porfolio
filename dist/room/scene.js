@@ -469,7 +469,7 @@ export function buildRoom({ portrait }) {
     neonLight.intensity = 0.9 * level;
   });
 
-  /* ---------- Wall shelf with radio → rain sound ---------- */
+  /* ---------- Wall shelf with radio → background music ---------- */
   const shelfY = 1.42;
   const shelfZ = WALL_Z + 0.11;
   add(scene, rbox(0.66, 0.03, 0.22, 0.006), wood, [-1.98, shelfY, shelfZ]);
@@ -488,7 +488,7 @@ export function buildRoom({ portrait }) {
     freqMat.color.set('#ffb347').multiplyScalar(radioState.on ? 2.4 + Math.sin(t * 3) * 0.3 : 0.25);
   });
   register({
-    id: 'radio', object: radio, label: 'Rain radio', hint: 'Click to play the rain',
+    id: 'radio', object: radio, label: 'Radio', hint: 'Click to play music',
     action: 'sound',
     apply: (h, t) => { radio.rotation.z = Math.sin(t * 18) * 0.02 * h; }
   });

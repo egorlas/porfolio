@@ -19,7 +19,7 @@ Then open `http://localhost:4173` for the 3D room or `http://localhost:4173/stat
 - `dist/room/scene.js`: procedural room, objects, lights, click targets
 - `dist/room/main.js`: renderer, post-processing, camera poses, interaction, sheet
 - `dist/room/textures.js`, `dist/room/shaders.js`: canvas textures and GLSL (city, rain, grade)
-- `dist/room/audio.js`: generated rain ambience
+- `dist/room/audio.js`: background music (`dist/assets/background.mp3`), played from the radio or the Music button
 - `dist/room/room.css`: HUD, markers and the paper sheet
 - `dist/static.html`, `dist/styles.css`, `dist/script.js`: text version
 - `dist/assets/`: portrait, identity visuals and the downloadable CV

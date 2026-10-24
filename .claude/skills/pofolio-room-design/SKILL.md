@@ -17,7 +17,7 @@ The portfolio is one scene: **a desk in Ha Noi at midnight while it rains**. Eve
 | `dist/room/main.js` | Renderer, bloom/grade post, camera poses, picking, sheet open/close, intro. |
 | `dist/room/textures.js` | Canvas textures: CRT terminal, tape spines, binders, notes, polaroid, neon. |
 | `dist/room/shaders.js` | City-through-window, rain on glass, final grade (vignette + grain). |
-| `dist/room/audio.js` | Generated rain ambience (WebAudio, starts only on click). |
+| `dist/room/audio.js` | Background music from `assets/background.mp3`. It loads and starts only on click, fades in and out, and pauses while the tab is hidden. |
 
 three.js is pinned to `three@0.160.0` through the import map in `index.html`. Don't bump it casually; addons paths change between versions.
 
@@ -32,7 +32,7 @@ three.js is pinned to `three@0.160.0` through the import map in `index.html`. Do
 | Red rotary phone | `contact` | Contact |
 | Red floppy "CV.PDF" | downloads `assets/ngo-vuong-cv.pdf` | CV |
 | Desk lamp | toggles the lamp | none, discovered by hover |
-| Radio on the wall shelf | toggles rain sound | none, discovered by hover |
+| Radio on the wall shelf (or the Music chip in the header) | plays or pauses `background.mp3` | none, discovered by hover |
 
 Binder colours are repeated as the `.swatch` next to each role in the sheet. If you add a role, add both the binder (`roles` in scene.js) and the swatch.
 
